@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %} Login {% endblock %}
+{% block body_block %}
+<div class="container border rounded mt-5 col-sm-6" id="location">
+    <h3 class="alert alert-light border rounded mt-4 mb-4 rounded" align="center"><b>Login Here</b></h3>
+    <form action="{% url 'Login_App:login' %}" method="POST" label="display:none">
+        {{form|crispy}}
+        {% csrf_token %}
+        <div class="text-center">
+            <button type="submit" class="btn btn-secondary btn-lg col-lg-4" href="{% url 'Search_App:home' %}">Login
+            </button>
+        </div>
+    </form>
+    <br>
+    <p>Doesn't have an account? <a href="{% url 'Login_App:signup' %}">Create New Account</a></p>
+</div>
+{% endblock %}

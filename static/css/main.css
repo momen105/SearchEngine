@@ -1,0 +1,25 @@
+.search_form button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: #1c156000;
+    border: none;
+    padding: 6px 30px;
+    color: #fff;
+    border-radius: 0 15px 15px 0;
+}
+.search_form input {
+    border: 1px solid #6c757d;
+    width: 100%;
+    border-radius: 15px;
+    padding: 5px 3px;
+}
+.search_form input:focus {
+
+    padding-left: 20px;
+}
+.modal-content {
+    margin-left: 381px;
+    margin-top: 85px;
+
+}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{%block body_block%}
+<style>
+    img.rounded-circle {
+    margin-left: 170px;
+}
+
+</style>
+<div class="container d-flex">
+    <div class="col-6">
+        <h3 class="alert alert-light border rounded mt-4 mb-4 rounded " align="center"><b>Add Profile Picture</b></h3>
+        <form method="POST" enctype="multipart/form-data">
+            {{form|crispy}}
+            {% csrf_token %}
+            <button type="submit" name="button" class='btn btn-primary'>Save</button>
+            <br>
+        </form>
+    </div>
+    <div class="col-6">
+
+        <h3 class="alert alert-light border rounded mt-4 mb-4 rounded " align="center"><b>About Me</b></h3>
+        {% if request.user.is_authenticated %}
+        {% if user.user_profile.profile_pic %}
+        <a class="nav-link" href="#"><img src="/media/{{user.user_profile.profile_pic}}"
+                                          width="150px"
+                                          height="150px" class="rounded-circle"></a>
+        {% else %}
+        <a class="nav-link" href="#"><img src="/media/default.jpg" width="150px"
+                                          height="150px"
+                                          class="rounded-circle"></a>
+        {% endif %}
+        {% endif %}
+
+        <table class="table table-hover border rounded">
+            <thead>
+            <tr>
+                <th scope="col">Context</th>
+                <th scope="col">Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Username</td>
+                <td>{{user}}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>{{user.email}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <a href="{% url 'Search_App:home' %}">Back to Home</a>
+    </div>
+
+</div>
+<br><br>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %} Home {% endblock %}
+{% block body_block %}
+
+<nav class="navbar sticky-top ">
+    <ul class="nav justify-content-end ml-auto " style="margin:15px; background-color: #FFF;
+    height: 76px; width: 100%;">
+
+        <!-- Button to Open the Modal -->
+        <button type="button" style="background-color: #1c156000; border: none;" data-toggle="modal"
+                data-target="#myModal">
+            {% if request.user.is_authenticated %}
+            <li class="nav-item">
+                {% if user.user_profile.profile_pic %}
+                <a class="nav-link" href="#">{{user.email}}&nbsp;<img src="/media/{{user.user_profile.profile_pic}}"
+                                                                      width="40px"
+                                                                      height="40px" class="rounded-circle"></a>
+                {% else %}
+                <a class="nav-link" href="#">{{user.email}}&nbsp;<img src="/media/default.jpg" width="40px"
+                                                                      height="40px"
+                                                                      class="rounded-circle"></a>
+                {% endif %}
+            </li>
+
+        </button>
+
+        {% else %}
+        <li class="nav-item">
+            <a class="login" href="{% url 'Login_App:login' %}">
+                <button class="btn btn-outline-secondary"> Login</button>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'Login_App:signup' %}">
+                <button class="btn" style="background-color: #1C1560; color: white;"> SignUp</button>
+            </a>
+        </li>
+        {% endif %}
+
+    </ul>
+
+</nav>
+
+<div class="container  mt-4 text-center">
+    <img src="/media/logo.png" alt="" height="100px;" width="120px;">
+</div>
+<div class="container mt-5 col-sm-6">
+
+    <form method="POST" enctype="multipart/form-data" class="search_form d-flex;">
+        {{form.as_p}}
+        {% csrf_token %}
+        <button type="submit"><i class="fas fa-search" style="color:#1c1560;"></i></button>
+    </form>
+</div>
+{% if final_result %}
+<b style="padding-left: 50px; padding-right: 50px; color: #646464;">Web Results</b>
+{% for result in final_result %}
+<div style="padding-left: 50px; padding-right: 50px;">
+    <h5 style="color: blue;"><a href="{{ result.1 }}">{{ result.0 }}</a></h5>
+    <h6 style="color: green;">{{ result.1 }}</h6>
+    <h6>{{ result.2 }}</h6>
+</div><br>
+{% endfor %}
+{% endif %}
+
+
+<div class="container">
+    <!-- The Modal -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Profile</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <ul style="list-style:none">
+                        <li>
+                            <a class="nav-link " href="{% url 'Login_App:profile' %}" style="color:#1C1560;">Profile</a>
+                        </li>
+                        <li>
+                            <a class="nav-link " href="{% url 'Search_App:history' %}"
+                               style="color:#1C1560;">History</a>
+                        </li>
+
+
+                    </ul>
+                    <!-- Modal footer -->
+                </div>
+                <div class="modal-footer">
+                    <a class="nav-link " href="{% url 'Login_App:logout' %}"
+                       style="color:#1C1560; margin-right: 145px;"><i class="fas fa-sign-out-alt"></i>Logout</a>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% block title_block %} History {% endblock %}
+{% block body_block %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+<br>
+<style>
+  tr:hover {
+  background-color: #f1f1f1;
+}
+input#myInput {
+    width: 40%;
+}
+
+tr.header {
+  background-color: #1D1665;
+    color: whitesmoke;
+        text-align: center;
+        height: 34px;
+}
+td {
+    text-align: center;
+}
+table tr td {
+    font-size: 14px;
+}
+</style>
+<div class="container d-flex">
+    <br>
+    <div class="col-6">
+        <h4 class="border rounded mt-4 mb-4 rounded" style="text-align: center; color:#1D1665; padding: 10px;">
+            Search </h4>
+        <div>
+            <form method="post" class="abc" action="{% url 'Search_App:search' %}">
+                {% csrf_token %}
+                <input style="width:80%;" class="abc" type="search" name="search"
+                       placeholder="Search by names or date or keyword or email">
+                <button class="abc" type="submit">Search</button>
+            </form>
+        </div>
+        <div>
+            <hr>
+            <h4 class="border rounded mt-4 mb-4 rounded" style="text-align: center; color:#1D1665; padding: 3px;">
+                Search by Filter </h4>
+            <form method="post" action="{% url 'Search_App:filter' %}" class="d-flex">
+                {% csrf_token %}
+                <div>
+                    <input type="search" name="user" placeholder="Search by username..">
+                    <input type="search" name="keyword" placeholder="Search by keyword.."><br><br>
+                    Form : <input type="date" name="fromdate">
+                    To : <input type="date" name="todate">
+                </div>
+                <div>
+                    <button type="submit">Filter</button>
+                </div>
+            </form>
+        </div>
+        <br>
+        <div id="location"></div>
+    </div>
+
+    <div class="col-6">
+        <h4 class="border rounded mt-4 mb-4 rounded" style="text-align: center; color:#1D1665; padding: 10px;">Search
+            History</h4>
+        <div class="d-flex">
+            <div class="w-50">
+                <table>
+                    <tr class="header">
+                        <th style="width:50%;">keyword</th>
+                        <th style="width:50%;">Total Found</th>
+                    </tr>
+                    <tbody>
+                    {% for history in keyword %}
+                    <tr>
+                        <td>{{history.keyword}}</td>
+                        <td>{{history.total}} times found</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="w-50">
+                <table>
+                    <tr class="header">
+                        <th style="width:30%;">All Users</th>
+                        <th style="width:50%;">Users Email</th>
+                    </tr>
+                    <tbody>
+                    {% for history in user %}
+                    <tr>
+                        <td>{{history}}</td>
+                        <td>{{history.email}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <hr>
+        <a href="{% url 'Search_App:home' %}">Back to Home</a>
+    </div>
+</div>
+
+<script>
+let dataTable = `<table class="w-100">
+            <tr class="header">
+                <th style="width:25%;">User</th>
+                <th style="width:25%;">Keword</th>
+                <th style="width:50%;">Date</th>
+            </tr>
+            <tbody>
+            {% for history in results %}
+            <tr>
+                <td>{{history.searcher.username}}</td>
+                <td>{{history.keyword}}</td>
+                <td>{{history.date | naturaltime }} &nbsp; {% now "D jS F Y " %}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>`;
+
+
+	window.onhashchange = window.onload = function(evt) {
+		document.getElementById('location').innerHTML = dataTable;
+	};
+
+
+
+</script>
+
+<script>
+        (function() {
+	var anchors = document.getElementsByClassName('abc');
+	var historyState = {};
+	var base = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+	for (var i = 0; i < anchors.length; i++) {
+		if (anchors[i].href.substring(0, location.origin.length) !== location.origin) {
+			continue;
+		}
+		anchors[i].addEventListener('click', function(evt) {
+			evt.preventDefault();
+			var newPage = window.location.href + '#' + evt.target.href.replace(base, '');
+			window.location.href = newPage;
+			if (history && history.pushState) {
+				history.pushState(historyState, evt.target.innerHTML, evt.target.href)
+			}
+		});
+	}
+})();
+
+
+</script>
+
+{% endblock %}
