@@ -19,8 +19,11 @@ def home(request):
         form = SearchForm(request.POST, request.FILES)
         if form.is_valid():
             search = form.save(commit=False)
-            search.searcher = request.user
-            search.save()
+            if request.user == True:
+                search.searcher = request.user
+                search.save()
+            else:
+                pass
             keyword = form.cleaned_data.get('keyword')
             url = 'https://www.ask.com/web?q=' + keyword
             res = requests.get(url)
