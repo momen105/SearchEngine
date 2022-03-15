@@ -18,8 +18,8 @@ def home(request):
     if request.method == 'POST':
         form = SearchForm(request.POST, request.FILES)
         if form.is_valid():
-            search = form.save(commit=False)
-            if request.user == True:
+            if request.user.is_authenticated:
+                search = form.save()
                 search.searcher = request.user
                 search.save()
             else:
